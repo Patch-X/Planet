@@ -5,6 +5,7 @@ public class PlanetWalker : MonoBehaviour
     public Transform planetCenter;
     public float moveSpeed = 1.0f;
     public float raycastDistance = 10f;
+    public int a;
     public LayerMask groundMask;
 
     private Vector3 targetPosition;
