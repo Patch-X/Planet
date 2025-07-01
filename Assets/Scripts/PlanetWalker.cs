@@ -17,6 +17,7 @@ public class PlanetWalker : MonoBehaviour
 
     void Update()
     {
+
         // 计算贴地方向
         Vector3 downDir = (planetCenter.position - transform.position).normalized;
 
