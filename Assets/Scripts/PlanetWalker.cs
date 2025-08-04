@@ -37,9 +37,9 @@ public class PlanetWalker : MonoBehaviour
 
     void Start()
     {
-        PickNewTarget();
-        lastPosition = transform.position;
         animator = visualModel.GetComponent<Animator>();
+        lastPosition = transform.position;
+        PickNewTarget();
     }
 
     void Update()
@@ -230,11 +230,17 @@ public class PlanetWalker : MonoBehaviour
 
     Vector3 TestTarget()
     {
-        // return new Vector3(-50.0f, 0.0f, 0.0f);
-        GridManager.Instance.TryGetRandomAvailableCell(out GridCell cell);
+        if (GridManager.Instance.TryGetRandomAvailableCell(out GridCell cell))
+        {
+            Vector3 targetPosition = cell.worldPosition;
+            return targetPosition;
+        }
+        else
+        {
+            return new Vector3(-50.0f, 0.0f, 0.0f);
+        }
 
-        Vector3 targetPosition = cell.worldPosition;
-        return targetPosition;
+
     }
 
     void PickNearbyTarget()
