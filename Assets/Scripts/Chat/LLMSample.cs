@@ -7,15 +7,15 @@ public class LLMSample : MonoBehaviour
     IEnumerator Start()
     {
         // 等待直到 Manager 初始化完毕
-        yield return new WaitUntil(() => VoiceService.Instance != null);
+        yield return new WaitUntil(() => LLMService.Instance != null);
 
         SetRespond();
-        VoiceService.Instance.StartVoiceInput();
+        LLMService.Instance.StartVoiceInput();
     }
 
     void SetRespond()
     {
-        VoiceService.Instance.OnMessageReceived += msg =>
+        LLMService.Instance.OnMessageReceived += msg =>
         {
             Debug.Log("🧠 AI Response: " + msg);
         };
@@ -24,6 +24,6 @@ public class LLMSample : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
-            VoiceService.Instance.SendText("你好，今天天气如何？");
+            LLMService.Instance.SendText("你好，今天天气如何？");
     }
 }

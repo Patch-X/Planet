@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class VoiceService : MonoBehaviour
+public class LLMService : MonoBehaviour
 {
-    public static VoiceService Instance { get; private set; }
+    public static LLMService Instance { get; private set; }
 
     public event Action<string> OnMessageReceived;  // 文本回调
     public event Action OnTTSStarted;               // TTS开始
