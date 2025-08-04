@@ -11,7 +11,7 @@ public class DebugDisplay : MonoBehaviour
         Application.targetFrameRate = 1000; // 或 60、120 等你想测试的上限
         QualitySettings.vSyncCount = 0;    // 禁用垂直同步，否则会影响帧率上限
 
-        CountTriangles();
+        // CountTriangles();
     }
 
     void Update()
