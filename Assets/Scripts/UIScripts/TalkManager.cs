@@ -16,10 +16,10 @@ public class TalkManager : MonoBehaviour
     IEnumerator Start()
     {
         // 等待直到 Manager 初始化完毕
-        yield return new WaitUntil(() => VoiceService.Instance != null);
+        yield return new WaitUntil(() => LLMService.Instance != null);
 
         OnRespond();
-        VoiceService.Instance.StartVoiceInput();
+        LLMService.Instance.StartVoiceInput();
     }
 
     public void OnInput()
@@ -42,7 +42,7 @@ public class TalkManager : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
             StartCoroutine(RefreshAndScroll());
             // 滚动到最底部
-            VoiceService.Instance.SendText(inputText);
+            LLMService.Instance.SendText(inputText);
             // 清空输入框
             inputField.text = string.Empty;
 
@@ -51,31 +51,31 @@ public class TalkManager : MonoBehaviour
 
     public void OnRespond()
     {
-        VoiceService.Instance.OnMessageReceived += msg =>
-       {
-           MsgData data = JsonUtility.FromJson<MsgData>(msg);
-           if (!string.IsNullOrEmpty(data.text))
-               respond = data.text;
-           if (!string.IsNullOrEmpty(data.emotion))
-               respond += $" ({data.emotion})";
-           if (!string.IsNullOrEmpty(respond))
-           {
-               GameObject newLeftTalk = Instantiate(LeftTalk, content);
-               Text leftText = newLeftTalk.GetComponentInChildren<Text>();
-               leftText.text = respond;
-               float width = Mathf.Min(leftText.preferredWidth + Padding, maxWidth + Padding);
-               Image leftImage = newLeftTalk.GetComponentInChildren<Image>();
-               RectTransform rt = leftImage.GetComponent<RectTransform>();
-               rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
-               VerticalLayoutGroup layout = newLeftTalk.GetComponent<VerticalLayoutGroup>();
-               layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
-               LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
-               LayoutRebuilder.ForceRebuildLayoutImmediate(newLeftTalk.GetComponent<RectTransform>());
-               LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
-               StartCoroutine(RefreshAndScroll()); // 滚动到最底部
-               respond = null;
-           }
-       };
+        LLMService.Instance.OnMessageReceived += msg =>
+        {
+            MsgData data = JsonUtility.FromJson<MsgData>(msg);
+            if (!string.IsNullOrEmpty(data.text))
+                respond = data.text;
+            if (!string.IsNullOrEmpty(data.emotion))
+                respond += $" ({data.emotion})";
+            if (!string.IsNullOrEmpty(respond))
+            {
+                GameObject newLeftTalk = Instantiate(LeftTalk, content);
+                Text leftText = newLeftTalk.GetComponentInChildren<Text>();
+                leftText.text = respond;
+                float width = Mathf.Min(leftText.preferredWidth + Padding, maxWidth + Padding);
+                Image leftImage = newLeftTalk.GetComponentInChildren<Image>();
+                RectTransform rt = leftImage.GetComponent<RectTransform>();
+                rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
+                VerticalLayoutGroup layout = newLeftTalk.GetComponent<VerticalLayoutGroup>();
+                layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+                LayoutRebuilder.ForceRebuildLayoutImmediate(newLeftTalk.GetComponent<RectTransform>());
+                LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
+                StartCoroutine(RefreshAndScroll()); // 滚动到最底部
+                respond = null;
+            }
+        };
 
 
     }

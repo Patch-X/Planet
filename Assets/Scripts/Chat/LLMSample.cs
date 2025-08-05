@@ -19,11 +19,16 @@ public class LLMSample : MonoBehaviour
         {
             Debug.Log("🧠 AI Response: " + msg);
         };
+
+        LLMService.Instance.OnMicVolumeChanged += volume =>
+        {
+            Debug.Log("volume: " + volume);
+        };
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
-            LLMService.Instance.SendText("你好，今天天气如何？");
+            LLMService.Instance.SendText("我很高兴你记得我");
     }
 }

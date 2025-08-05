@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections.Generic;
 public class PlanetWalker : MonoBehaviour
 {
     [Header("References")]
@@ -207,6 +207,7 @@ public class PlanetWalker : MonoBehaviour
 
     void PickNewTarget()
     {
+        Debug.Log("PickNewTarget");
         float maxAngle = 20f;
         Vector3 currentDir = (transform.position - planetCenter.position).normalized;
         Quaternion randomRot = Quaternion.AngleAxis(Random.Range(-maxAngle, maxAngle), Random.onUnitSphere);
@@ -239,8 +240,6 @@ public class PlanetWalker : MonoBehaviour
         {
             return new Vector3(-50.0f, 0.0f, 0.0f);
         }
-
-
     }
 
     void PickNearbyTarget()
@@ -275,5 +274,20 @@ public class PlanetWalker : MonoBehaviour
             }
         }
         return false;
+    }
+
+    void DoFindPath()
+    {
+        GridCell startCell = new GridCell();
+        GridCell endCell = new GridCell();
+
+        List<GridCell> path = Pathfinder.FindPath(startCell, endCell);
+        if (path != null)
+        {
+            foreach (var cell in path)
+            {
+                Debug.Log($"Path through: face={cell.face}, x={cell.x}, y={cell.y}");
+            }
+        }
     }
 }

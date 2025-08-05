@@ -14,6 +14,7 @@ public class ConcentusVoiceClient : MonoBehaviour
     public string bearerToken = "<your-token>";
 
     public event Action<string> OnMessageReceived;
+    public event Action<float> OnMicVolumeChanged;
     public event Action OnTTSStarted;
     public event Action OnTTSEnded;
 
@@ -43,7 +44,8 @@ public class ConcentusVoiceClient : MonoBehaviour
         socket = new WebSocket(websocketUrl);
         socket.SetHeader("Authorization", "Bearer " + bearerToken);
         socket.SetHeader("Protocol-Version", "1");
-        socket.SetHeader("Device-Id", "AF:01:41:0B:C8:28");
+        // socket.SetHeader("Device-Id", "AF:01:41:0B:C8:28");
+        socket.SetHeader("Device-Id", "01:23:45:67:89:AB");
         socket.SetHeader("Client-Id", SystemInfo.deviceUniqueIdentifier);
 
         socket.OnOpen += () => SendHello();
@@ -58,7 +60,7 @@ public class ConcentusVoiceClient : MonoBehaviour
             if (!string.IsNullOrEmpty(msgStr) && msgStr.Contains("type"))
             {
                 // Debug.Log("📥 JSON Msg: " + msgStr);
-                if (msgStr.Contains("hello")) SendListenStart();
+                // if (msgStr.Contains("hello")) SendListenStart();
                 OnMessageReceived?.Invoke(msgStr);
             }
             else
@@ -73,6 +75,7 @@ public class ConcentusVoiceClient : MonoBehaviour
 
     async void SendHello()
     {
+        Debug.Log("SendHello");
         var hello = new
         {
             type = "hello",
@@ -140,6 +143,19 @@ public class ConcentusVoiceClient : MonoBehaviour
 
                 socket.Send(frame);
             }
+
+            float max = 0f;
+
+            for (int i = 0; i < frameSize; i++)
+            {
+                float clamped = Mathf.Clamp(pcmBuffer[i], -1f, 1f);
+                pcmShorts[i] = (short)(clamped * short.MaxValue);
+                max = Mathf.Max(max, Mathf.Abs(clamped));  // 取当前帧的最大振幅
+            }
+
+            // 通知 UI 层展示音量波动（范围在 0~1 之间）
+            OnMicVolumeChanged?.Invoke(max);
+
             yield return new WaitForSeconds(0.06f);
         }
     }
