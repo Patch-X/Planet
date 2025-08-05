@@ -23,16 +23,15 @@ public class TalkManager : MonoBehaviour
         yield return new WaitUntil(() => LLMService.Instance != null);
 
         OnRespond();
-        LLMService.Instance.StartVoiceInput();
+        // LLMService.Instance.StartVoiceInput();
         LLMService.Instance.OnMicVolumeChanged += volume =>
-       {
-           height = volume;
-       };
+        {
+            height = volume;
+        };
     }
 
     void Update()
     {
-
         if (height > 0.01f)
         {
             height = Mathf.Lerp(20f, 1f, height);
@@ -110,6 +109,10 @@ public class TalkManager : MonoBehaviour
         scrollRect.verticalNormalizedPosition = 0;
     }
 
+    public void OnCloseVoiceButton()
+    {
+        height = 0.0f;
+    }
 
 }
 [Serializable]
