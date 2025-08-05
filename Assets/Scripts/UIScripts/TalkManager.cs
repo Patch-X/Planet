@@ -13,6 +13,10 @@ public class TalkManager : MonoBehaviour
     public float Padding = 20f;//image加上字符左右边距的大小
     public float Paddingedge = 30f;//image距离左右的距离
     string respond = null;
+    public ScrollRect wavescrollRect;
+    public float scrollSpeed = 0.2f; // 每秒滚动速度
+    public Material mat;
+    float height = 0f;
     IEnumerator Start()
     {
         // 等待直到 Manager 初始化完毕
@@ -20,6 +24,26 @@ public class TalkManager : MonoBehaviour
 
         OnRespond();
         LLMService.Instance.StartVoiceInput();
+        LLMService.Instance.OnMicVolumeChanged += volume =>
+       {
+           height = volume;
+       };
+    }
+
+    void Update()
+    {
+
+        if (height > 0.01f)
+        {
+            height = Mathf.Lerp(20f, 1f, height);
+            mat.SetFloat("Height", height);
+
+            // 自动向右滚动
+            wavescrollRect.horizontalNormalizedPosition += scrollSpeed * Time.deltaTime;
+            // 到达最右侧后回到最左侧，实现循环
+            if (wavescrollRect.horizontalNormalizedPosition > 1f)
+                wavescrollRect.horizontalNormalizedPosition = 0f;
+        }
     }
 
     public void OnInput()
@@ -85,6 +109,7 @@ public class TalkManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
         scrollRect.verticalNormalizedPosition = 0;
     }
+
 
 }
 [Serializable]
