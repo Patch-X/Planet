@@ -35,7 +35,7 @@ public class TalkManager : MonoBehaviour
 
         if (height > 0.01f)
         {
-            height = Mathf.Lerp(20f, 1f, height);
+            height = 20f - (height * 20);
             mat.SetFloat("Height", height);
 
             // 自动向右滚动
