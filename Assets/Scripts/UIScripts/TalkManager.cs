@@ -15,8 +15,9 @@ public class TalkManager : MonoBehaviour
     string respond = null;
     public ScrollRect wavescrollRect;
     public float scrollSpeed = 0.2f; // 每秒滚动速度
-    public Material mat;
-    float height = 0f;
+                                     // public Material mat;
+    public Image Wave;
+    float height = 20f;
     IEnumerator Start()
     {
         // 等待直到 Manager 初始化完毕
@@ -26,22 +27,31 @@ public class TalkManager : MonoBehaviour
         // LLMService.Instance.StartVoiceInput();
         LLMService.Instance.OnMicVolumeChanged += volume =>
         {
-            height = volume;
+            height = Mathf.Lerp(20f, 1f, volume);
         };
     }
 
     void Update()
     {
-        if (height > 0.01f)
+
+        if (height < 18f)
         {
-            height = 20f - (height * 20);
-            mat.SetFloat("Height", height);
+
+            Material mat = Wave.material;
+            height = Mathf.Lerp(20f, 1f, height);
+
+            mat.SetFloat("_Height", height);
 
             // 自动向右滚动
             wavescrollRect.horizontalNormalizedPosition += scrollSpeed * Time.deltaTime;
             // 到达最右侧后回到最左侧，实现循环
             if (wavescrollRect.horizontalNormalizedPosition > 1f)
                 wavescrollRect.horizontalNormalizedPosition = 0f;
+        }
+        else
+        {
+            Material mat = Wave.material;
+            mat.SetFloat("_Height", height);
         }
     }
 
@@ -77,7 +87,7 @@ public class TalkManager : MonoBehaviour
         LLMService.Instance.OnMessageReceived += msg =>
         {
             MsgData data = JsonUtility.FromJson<MsgData>(msg);
-            if (!string.IsNullOrEmpty(data.text))
+            if (!string.IsNullOrEmpty(data.text) && data.type != "stt" && data.state != "sentence_end")
                 respond = data.text;
             if (!string.IsNullOrEmpty(data.emotion))
                 respond += $" ({data.emotion})";
@@ -127,6 +137,7 @@ public class AudioParams
 [Serializable]
 public class MsgData
 {
+    public string state;//消息状态
     public string type;//消息类型
     public string text;//文本
     public string emotion;//表情
