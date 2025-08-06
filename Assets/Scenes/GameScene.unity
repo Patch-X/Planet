@@ -25797,7 +25797,7 @@ MonoBehaviour:
   Paddingedge: 30
   wavescrollRect: {fileID: 167900495}
   scrollSpeed: 0.2
-  mat: {fileID: 2100000, guid: d76e36941c1b3a44191bc2b2e4cd8c82, type: 2}
+  Wave: {fileID: 737198903}
 --- !u!114 &1246638724
 MonoBehaviour:
   m_ObjectHideFlags: 0
