@@ -123,7 +123,7 @@ public class PanelDOTween : MonoBehaviour
         CanvasGroup canvasGroup = panel.gameObject.GetComponent<CanvasGroup>();
         panel.gameObject.SetActive(true);
         canvasGroup.alpha = 0f;
-        canvasGroup.DOFade(1f, animationTime);
+        //canvasGroup.DOFade(1f, animationTime);
     }
     public void OnPanelFadeout(RectTransform panel)
     {

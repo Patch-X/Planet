@@ -1,5 +1,5 @@
 using UnityEngine;
-using NativeWebSocket;
+////using NativeWebSocket;
 using Concentus.Structs;
 using Concentus.Enums;
 using System;
@@ -18,7 +18,7 @@ public class ConcentusVoiceClient : MonoBehaviour
     public event Action OnTTSStarted;
     public event Action OnTTSEnded;
 
-    private WebSocket socket;
+    //private WebSocket socket;
     private AudioClip micClip;
     private int micPosition = 0;
     private const int sampleRate = 16000;
@@ -41,36 +41,36 @@ public class ConcentusVoiceClient : MonoBehaviour
         decoder = new OpusDecoder(sampleRate, playbackChannels);
         audioSource = gameObject.AddComponent<AudioSource>();
 
-        socket = new WebSocket(websocketUrl);
-        socket.SetHeader("Authorization", "Bearer " + bearerToken);
-        socket.SetHeader("Protocol-Version", "1");
-        // socket.SetHeader("Device-Id", "AF:01:41:0B:C8:28");
-        socket.SetHeader("Device-Id", "01:23:45:67:89:AB");
-        socket.SetHeader("Client-Id", SystemInfo.deviceUniqueIdentifier);
+        //socket = new WebSocket(websocketUrl);
+        //socket.SetHeader("Authorization", "Bearer " + bearerToken);
+        //socket.SetHeader("Protocol-Version", "1");
+        //// socket.SetHeader("Device-Id", "AF:01:41:0B:C8:28");
+        //socket.SetHeader("Device-Id", "01:23:45:67:89:AB");
+        //socket.SetHeader("Client-Id", SystemInfo.deviceUniqueIdentifier);
 
-        socket.OnOpen += () => SendHello();
-        socket.OnClose += code => Debug.LogWarning("Socket closed: " + code);
-        socket.OnError += err => Debug.LogError("Socket error: " + err);
+        //socket.OnOpen += () => SendHello();
+        //socket.OnClose += code => Debug.LogWarning("Socket closed: " + code);
+        //socket.OnError += err => Debug.LogError("Socket error: " + err);
 
-        socket.OnMessage += (bytes) =>
-        {
-            string msgStr = null;
-            try { msgStr = Encoding.UTF8.GetString(bytes); } catch { }
+        //socket.OnMessage += (bytes) =>
+        //{
+        //    string msgStr = null;
+        //    try { msgStr = Encoding.UTF8.GetString(bytes); } catch { }
 
-            if (!string.IsNullOrEmpty(msgStr) && msgStr.Contains("type"))
-            {
-                // Debug.Log("📥 JSON Msg: " + msgStr);
-                // if (msgStr.Contains("hello")) SendListenStart();
-                OnMessageReceived?.Invoke(msgStr);
-            }
-            else
-            {
-                OnTTSStarted?.Invoke();
-                HandleAudioResponse(bytes);
-            }
-        };
+        //    if (!string.IsNullOrEmpty(msgStr) && msgStr.Contains("type"))
+        //    {
+        //        // Debug.Log("📥 JSON Msg: " + msgStr);
+        //        // if (msgStr.Contains("hello")) SendListenStart();
+        //        OnMessageReceived?.Invoke(msgStr);
+        //    }
+        //    else
+        //    {
+        //        OnTTSStarted?.Invoke();
+        //        HandleAudioResponse(bytes);
+        //    }
+        //};
 
-        await socket.Connect();
+        //await socket.Connect();
     }
 
     async void SendHello()
@@ -89,7 +89,7 @@ public class ConcentusVoiceClient : MonoBehaviour
                 frame_duration = 60
             }
         };
-        await socket.SendText(JsonConvert.SerializeObject(hello));
+        //await socket.SendText(JsonConvert.SerializeObject(hello));
     }
 
     async void SendListenStart()
@@ -101,7 +101,7 @@ public class ConcentusVoiceClient : MonoBehaviour
             state = "start",
             mode = "manual"
         };
-        await socket.SendText(JsonConvert.SerializeObject(listen));
+        //await socket.SendText(JsonConvert.SerializeObject(listen));
 
         StartMicrophone();
         readyToSend = true;
@@ -141,7 +141,7 @@ public class ConcentusVoiceClient : MonoBehaviour
                 byte[] frame = new byte[len];
                 Array.Copy(opusBuffer, frame, len);
 
-                socket.Send(frame);
+                //socket.Send(frame);
             }
 
             float max = 0f;
@@ -191,27 +191,27 @@ public class ConcentusVoiceClient : MonoBehaviour
 
     public async void SendTextMessage(string text)
     {
-        if (string.IsNullOrWhiteSpace(text) || socket == null || socket.State != WebSocketState.Open) return;
+        //if (string.IsNullOrWhiteSpace(text) || socket == null || socket.State != WebSocketState.Open) return;
 
-        var msg = new
-        {
-            type = "listen",
-            mode = "manual",
-            state = "detect",
-            text = text.Trim()
-        };
-        await socket.SendText(JsonConvert.SerializeObject(msg));
+        //var msg = new
+        //{
+        //    type = "listen",
+        //    mode = "manual",
+        //    state = "detect",
+        //    text = text.Trim()
+        //};
+        //await socket.SendText(JsonConvert.SerializeObject(msg));
     }
 
-    void Update()
-    {
-        socket?.DispatchMessageQueue();
-    }
+    //void Update()
+    //{
+    //    socket?.DispatchMessageQueue();
+    //}
 
-    async void OnDestroy()
-    {
-        readyToSend = false;
-        if (socket != null && socket.State == WebSocketState.Open)
-            await socket.Close();
-    }
+    //async void OnDestroy()
+    //{
+    //    readyToSend = false;
+    //    if (socket != null && socket.State == WebSocketState.Open)
+    //        await socket.Close();
+    //}
 }
