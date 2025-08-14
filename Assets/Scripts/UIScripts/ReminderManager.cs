@@ -162,8 +162,7 @@ public class ReminderManager : MonoBehaviour
                 {
                     GameObject canvas = GameObject.Find("Canvas");
                     GameObject reminderPanel = canvas.transform.Find("ReminderPanel").gameObject;
-                    PanelDOTween panelDOTween = newOutReminder.GetComponent<PanelDOTween>();
-                    panelDOTween.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
+                    PanelDOTween.Instance.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
                     SaveReminderData();
                 });
         }

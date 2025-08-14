@@ -83,9 +83,9 @@ public class TalkManager : MonoBehaviour
             RectTransform rt = rightImage.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
             VerticalLayoutGroup layout = newRightTalk.GetComponent<VerticalLayoutGroup>();
-            Debug.Log(Screen.width);
-            // layout.padding.left = (int)(1080 - width - Paddingedge);//右气泡往左移动距离
-            layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
+            float PaddingedgeRight = 720f - width - Paddingedge;//右边距
+
+            layout.padding.left = (int)PaddingedgeRight;//左气泡往左移动距离
             LayoutRebuilder.ForceRebuildLayoutImmediate(rt);//刷新刷新 ContentSizeFitter
             LayoutRebuilder.ForceRebuildLayoutImmediate(newRightTalk.GetComponent<RectTransform>());
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
@@ -117,7 +117,7 @@ public class TalkManager : MonoBehaviour
                 RectTransform rt = leftImage.GetComponent<RectTransform>();
                 rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
                 VerticalLayoutGroup layout = newLeftTalk.GetComponent<VerticalLayoutGroup>();
-                layout.padding.left = (int)Paddingedger;//左气泡往左移动距离
+                layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(newLeftTalk.GetComponent<RectTransform>());
                 LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
