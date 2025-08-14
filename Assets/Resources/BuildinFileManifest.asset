@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b02dfa7aa9d4545b3417a18477fbee, type: 3}
+  m_Name: BuildinFileManifest
+  m_EditorClassIdentifier: 
+  BuildinFiles:
+  - 036bce459436c031a0ce55eaccb1dbe1.bundle
+  - 0b21753afeba0015e825827a7953f350.bundle
+  - 10be33163390c20670aa6d6263b06dda.rawfile
+  - 144743a29ad949c96c28ba664194f068.bundle
+  - 16a83ee3f3548fea8bcd8b4b3ffd1d9a.bundle
+  - 1b4a199a6ca48e3e29017a869abb11c3.bundle
+  - 1db5689c08b73bff557a94f40c03a95c.bundle
+  - 1e304f4c941e183e179b2e41d9931d2c.bundle
+  - 202ba0791146e75cf1692176271439b9.bundle
+  - 22662f15e38090e98cd32778c91089f0.bundle
+  - 29225f0c10cb946b3856f3ced5783733.bundle
+  - 4028715826bacc0ba7b609a45fbece34.bundle
+  - 407896fb5c9104ecbb8aeeaf3e0ab517.rawfile
+  - 4f989a0e5d35c0fd8e393fd04432f433.bundle
+  - 55632260427f0afd4d001097f25f9fb3.bundle
+  - 5bdcf97fa71c2df6f14d34f0c7924850.bundle
+  - 60e227edf4dd50d2adcb4099ea0c7e6d.bundle
+  - 64bd2c3646d466e4dad21d5f12276ec3.bundle
+  - 66026c4ae636bfdaf84967719d306261.bundle
+  - 6c234f61a2ad3d63576023d1bf61c946.rawfile
+  - 72909dcdb3bb183afb940d2e62beed9a.bundle
+  - 818abfbeebc5be5ac01ba26a65c4e274.rawfile
+  - 8eb1cb149675eefb1949ed29c360b8b6.bundle
+  - 9573cc9e92047886b2529749bbb32355.bundle
+  - 9f71d8c37e2943e263bca6f5179eb5ce.bundle
+  - a33efb7181c57662245cbad1d3d25251.bundle
+  - a36ae79650fa9c14e4c0b95b017a9a42.bundle
+  - a60f42524d7488dc299a2c6c15279cec.bundle
+  - ab8ceb113b85161d416c31ef1c6d7113.bundle
+  - b68287239c1c0591620aadd873f3b4c5.bundle
+  - c0256f84a260d2ef82c360b0011c1e8a.bundle
+  - c09dabc94154fa576cf45ca660701459.bundle
+  - c82a7a44cb5e0f4f5f8c4357364de6c6.bundle
+  - e8a6bfd03f8b640b737bb8c8af8de7e7.bundle
+  - eb477bf12e342029d348d1b6d67c43fa.bundle
+  - f50b544635eb7f8fe8f9a88d331d5560.bundle
+  - f53b787072bd2b2641f4c7711e918357.rawfile
+  - f5b575c74465ec30d9c6fd986bab37be.bundle
+  - f831f64aaebf40af9d0394a1da03a691.bundle

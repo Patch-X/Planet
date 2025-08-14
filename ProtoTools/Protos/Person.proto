@@ -1,0 +1,20 @@
+syntax="proto3";//指定了正在使用proto3语法，如果没指定编译器默认使用proto2语法
+package ProtoBuff;//等于C#中命名空间
+ 
+message personInfo
+{
+	string name=1;
+	int32 age=2;
+	int64 money=3;
+	message PhoneNumber{
+		string number=1;
+		PhoneType type=2;
+	}
+	repeated PhoneNumber phone=5;
+}
+ 
+enum PhoneType{
+	HOME=0;
+	WORK=1;
+	MOBILE=2;
+}
