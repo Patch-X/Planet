@@ -17,79 +17,20 @@ public class ReminderManager : MonoBehaviour
     private List<ReminderData> reminderData = new List<ReminderData>();//记事数据列表
     private List<GameObject> reminderobject = new List<GameObject>();//记事物体列表
     private List<GameObject> outreminderobject = new List<GameObject>();//记事物体列表
-    private int i;//列表索引
+    private List<int> destroyindex = new List<int>();
+    public ScrollRect scrollRect;//滚动条
     private int x;//记事条排列的位置
-    public GameObject tip;//提示ui
+    private int notificationId = 0;
+    public GameObject androidsettingtip;//提示ui
     void Start()
     {
-
-
+        // PlayerPrefs.DeleteAll(); // 清除所有 PlayerPrefs 数据，便于测试
         // 为提交按钮添加点击事件
         submitButton.onClick.AddListener(OnSubmit);
         AndroidNotificationCenter.OnNotificationReceived += NotificationReceived;
         LoadReminderData();
-
+        CheckNotification();
     }
-    // void Update()
-    // {
-    //     if (Application.platform == RuntimePlatform.Android)
-    //     {
-
-    //         if (reminderData != null)//如果记事数据列表不为空
-    //         {
-    //             foreach (var data in reminderData)
-    //             {
-    //                 if (data == null)
-    //                 {
-
-    //                     continue;
-    //                 }
-
-    //                 string isget = AndroidNotificationManager.Instance.CheckNotificationStatus(data.ID);//检查有无送达消息
-    //                 if (isget == "Delivered")//已经送达
-    //                 {
-    //                     for (int i = 0; i < reminderobject.Count; i++)//删除记事条
-    //                     {
-    //                         Reminder reminderComponent = reminderobject[i].GetComponent<Reminder>();//找到记事条的reminder数据
-    //                         Reminder outreminderComponent = outreminderobject[i].GetComponent<Reminder>();
-    //                         if (data.ID == reminderComponent.reminderDataId)//记事条reminder的id数据和要删的reminderdata数据一致
-    //                         {
-    //                             DestroyReminder(reminderobject[i], outreminderobject[i], reminderComponent);
-    //                             SaveReminderData();//保存数据
-    //                         }
-    //                     }
-
-    //                 }
-    //                 else if (isget == "Scheduled")//发送中
-    //                 {
-
-    //                     continue;//继续循环
-    //                 }
-    //                 else
-    //                 {
-    //                     for (int i = 0; i < reminderobject.Count; i++)//删除记事条
-    //                     {
-    //                         Reminder reminderComponent = reminderobject[i].GetComponent<Reminder>();//找到记事条的reminder数据
-    //                         Reminder outreminderComponent = outreminderobject[i].GetComponent<Reminder>();
-    //                         if (data.ID == reminderComponent.reminderDataId)//记事条reminder的id数据和要删的reminderdata数据一致
-    //                         {
-    //                             DestroyReminder(reminderobject[i], outreminderobject[i], reminderComponent);
-    //                             SaveReminderData();//保存数据
-    //                         }
-    //                     }
-
-    //                     tip.SetActive(true);//弹出UI
-
-    //                 }
-
-
-    //             }
-    //         }
-    //     }
-
-
-    // }
-
     void OnSubmit()
     {
 
@@ -98,89 +39,81 @@ public class ReminderManager : MonoBehaviour
             if (!AndroidNotificationManager.Instance.CheckPermissionStatus())//先检查权限
                 return;
         }
-
         // 获取输入的文本
         string inputText = inputField.text;
-
         // 检查输入是否为空
         if (!string.IsNullOrEmpty(inputText))
         {
             string selectedHour = hourDropdown.options[hourDropdown.value].text;
             string selectedMinute = minuteDropdown.options[minuteDropdown.value].text;
+            DateTime firetime = CalculateTriggerTime(int.Parse(selectedHour), int.Parse(selectedMinute));//计算时间
+#if UNITY_ANDROID && !UNITY_EDITOR
             //发送通知，返回通知的id
-            int notificationId = AndroidNotificationManager.Instance.ScheduleNotification(int.Parse(selectedHour), int.Parse(selectedMinute), inputText);
-            reminderData.Add(new ReminderData(inputText, selectedHour, selectedMinute, notificationId));
-            i = reminderData.Count - 1; // 设置 i 为新项的索引
-                                        // 实例化记事条预制体
+             notificationId = AndroidNotificationManager.Instance.ScheduleNotification(firetime, inputText);
+            if (notificationId == -1)//发送失败
+            {
+                androidsettingtip.SetActive(true);
+                Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+                tiptext.text = firetime.ToString("HH:mm") + "通知发送失败,可能是禁止设备后台启动或者关闭了通知，请按设置获取权限";
+                inputField.text = string.Empty;
+                return;
+            }
+#else
+            notificationId++;//unity测试id号
+#endif
+            reminderData.Add(new ReminderData(inputText, firetime, notificationId));
+            // 实例化记事条预制体
             GameObject newReminder = Instantiate(ReminderPrefab, ReminderList);
             GameObject newOutReminder = Instantiate(OutReminderPrefab, OutReminderList);
-            //单个预制体数据
             Reminder reminderComponent = newReminder.GetComponent<Reminder>();
             Reminder outreminderComponent = newOutReminder.GetComponent<Reminder>();
-            reminderComponent.reminderDataId = reminderData[i].ID;
-            outreminderComponent.reminderDataId = reminderData[i].ID;
             // GameObject保存到列表
             reminderobject.Add(newReminder);
             outreminderobject.Add(newOutReminder);
-            reminderData.Sort((a, b) => a.time.CompareTo(b.time));//排序
+            reminderData.Sort((a, b) => a.firetime.CompareTo(b.firetime));//排序
+
             SaveReminderData();
-            for (int i = 0; i < reminderData.Count; i++)
-            {
-                if (reminderData[i].ID == reminderComponent.reminderDataId)
-
-                {
-                    x = i; //记事条在列表排列的位置
-
-                    break;
-                }
-            }
             for (int j = 0; j < reminderData.Count; j++)
             {
                 // 获取对应的 GameObject
                 GameObject reminderFromDict = reminderobject[j];
                 GameObject outReminderFromDict = outreminderobject[j];
-
-                Reminder reminderComponentSorted = reminderFromDict.GetComponent<Reminder>();
-                Reminder outreminderComponentSorted = outReminderFromDict.GetComponent<Reminder>();
-
+                //单个预制体数据
+                Reminder reminderComponentFromDict = reminderFromDict.GetComponent<Reminder>();
+                Reminder outreminderComponentFromDict = outReminderFromDict.GetComponent<Reminder>();
+                reminderComponentFromDict.reminderData = reminderData[j];
+                outreminderComponentFromDict.reminderData = reminderData[j];
                 // 更新文本内容
-                reminderComponentSorted.reminderText.text = reminderData[j].text;
-                outreminderComponentSorted.reminderText.text = reminderData[j].text;
-                reminderComponentSorted.TimereminderText.text = reminderData[j].Hour + ":" + reminderData[j].Minute;
-                outreminderComponentSorted.TimereminderText.text = reminderData[j].Hour + ":" + reminderData[j].Minute;
-                reminderComponent.reminderDataId = reminderData[j].ID;
-                outreminderComponent.reminderDataId = reminderData[j].ID;
+                reminderComponentFromDict.reminderText.text = reminderData[j].text;
+                outreminderComponentFromDict.reminderText.text = reminderData[j].text;
+                reminderComponentFromDict.TimereminderText.text = reminderData[j].firetime.ToString("HH:mm");
+                outreminderComponentFromDict.TimereminderText.text = reminderData[j].firetime.ToString("HH:mm");
+                reminderComponentFromDict.TimeMDreminderText.text = reminderData[j].firetime.ToString("MM/dd");
+                outreminderComponentFromDict.TimeMDreminderText.text = reminderData[j].firetime.ToString("MM/dd");
+                if (reminderData[j].ID == notificationId)//如果新加的ID等于列表中的ID，找到新加数据的位置
+                {
+                    x = j + 1;
 
+                }
             }
-
+            LayoutRebuilder.ForceRebuildLayoutImmediate(ReminderList.gameObject.GetComponent<RectTransform>());//刷新UI列表
+            ScrollToIndex(x);
+            ReminderColor(x - 1);//闪烁颜色
             // 清空输入框
-            inputField.text = string.Empty;                                                                                                                                                                                                                         //获取当前记事条的索引并计算滚动位置
-            float newScrollPosition = 1 - (x / (float)reminderData.Count);
-            if (newScrollPosition < 0.125f)
-            {
-                newScrollPosition = 0f;
-            }
-            if (newScrollPosition > 0.875f)
-            {
-                newScrollPosition = 1f;
-            }
+            inputField.text = string.Empty;
             outreminderComponent.DestroyButton.onClick.AddListener(() => DestroyReminder(newReminder, newOutReminder, reminderComponent));
             outreminderComponent.OutReminderButton.onClick.AddListener(() =>
                 {
                     GameObject canvas = GameObject.Find("Canvas");
                     GameObject reminderPanel = canvas.transform.Find("ReminderPanel").gameObject;
-                    PanelDOTween panelDOTween = newOutReminder.GetComponent<PanelDOTween>();
-                    panelDOTween.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
-                    SaveReminderData();
+                    PanelDOTween.Instance.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
                 });
         }
     }
-
     void SaveReminderData()//保存数据
     {
         // 序列化 reminderData 为 JSON 字符串
         string json = JsonUtility.ToJson(new ReminderDataList(reminderData));
-
         // 保存到 PlayerPrefs
         PlayerPrefs.SetString("ReminderData", json);
         PlayerPrefs.Save();
@@ -195,47 +128,47 @@ public class ReminderManager : MonoBehaviour
             // 更新 UI
             UpdateReminderUI();
         }
-        void UpdateReminderUI()
-        {
-
-            foreach (var data in reminderData)
-            {
-                if (data == null)
-                {
-                    Debug.LogWarning("ReminderData 为 null，跳过该项");
-                    continue;
-                }
-                // 重新生成提醒条目
-                GameObject newReminder = Instantiate(ReminderPrefab, ReminderList);
-                GameObject newOutReminder = Instantiate(OutReminderPrefab, OutReminderList);
-                Reminder reminderComponent = newReminder.GetComponent<Reminder>();
-                Reminder outreminderComponent = newOutReminder.GetComponent<Reminder>();
-                reminderComponent.reminderText.text = data.text;
-                reminderComponent.TimereminderText.text = data.Hour + ":" + data.Minute;
-                outreminderComponent.reminderText.text = data.text;
-                outreminderComponent.TimereminderText.text = data.Hour + ":" + data.Minute;
-                reminderComponent.reminderDataId = data.ID;
-                outreminderComponent.reminderDataId = data.ID;
-
-                // 将新的提醒条目添加到列表中
-
-                reminderobject.Add(newReminder);
-                outreminderobject.Add(newOutReminder);
-                outreminderComponent.DestroyButton.onClick.AddListener(() => DestroyReminder(newReminder, newOutReminder, reminderComponent));
-                outreminderComponent.OutReminderButton.onClick.AddListener(() =>
-                    {
-                        GameObject canvas = GameObject.Find("Canvas");
-                        GameObject reminderPanel = canvas.transform.Find("ReminderPanel").gameObject;
-                        PanelDOTween panelDOTween = newOutReminder.GetComponent<PanelDOTween>();
-                        panelDOTween.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
-                        SaveReminderData();
-                    });
-
-
-            }
-        }
 
     }
+    void UpdateReminderUI()
+    {
+
+        foreach (var data in reminderData)
+        {
+            if (data == null)
+            {
+                Debug.LogWarning("ReminderData 为 null，跳过该项");
+                continue;
+            }
+            data.ParseFiretime();
+            // 重新生成提醒条目
+            GameObject newReminder = Instantiate(ReminderPrefab, ReminderList);
+            GameObject newOutReminder = Instantiate(OutReminderPrefab, OutReminderList);
+            Reminder reminderComponent = newReminder.GetComponent<Reminder>();
+            Reminder outreminderComponent = newOutReminder.GetComponent<Reminder>();
+            reminderComponent.reminderText.text = data.text;
+            reminderComponent.TimereminderText.text = data.firetime.ToString("HH:mm");
+            reminderComponent.TimeMDreminderText.text = data.firetime.ToString("MM/dd");
+            outreminderComponent.reminderText.text = data.text;
+            outreminderComponent.TimereminderText.text = data.firetime.ToString("HH:mm");
+            outreminderComponent.TimeMDreminderText.text = data.firetime.ToString("MM/dd");
+            reminderComponent.reminderData = data;
+            outreminderComponent.reminderData = data;
+            // 将新的提醒条目添加到列表中
+            reminderobject.Add(newReminder);
+            outreminderobject.Add(newOutReminder);
+            outreminderComponent.DestroyButton.onClick.AddListener(() => DestroyReminder(newReminder, newOutReminder, reminderComponent));
+            outreminderComponent.OutReminderButton.onClick.AddListener(() =>
+                {
+                    GameObject canvas = GameObject.Find("Canvas");
+                    GameObject reminderPanel = canvas.transform.Find("ReminderPanel").gameObject;
+                    PanelDOTween panelDOTween = newOutReminder.GetComponent<PanelDOTween>();
+                    panelDOTween.OnPanelUp(reminderPanel.GetComponent<RectTransform>());
+                    SaveReminderData();
+                });
+        }
+    }
+
     void DestroyReminder(GameObject newReminder, GameObject newOutReminder, Reminder reminderComponent)//删除记事条
     {
         Destroy(newReminder);
@@ -245,15 +178,14 @@ public class ReminderManager : MonoBehaviour
         outreminderobject.Remove(newOutReminder);
         for (int j = 0; j < reminderData.Count; j++)//遍历整个列表，找到要删除的id。
         {
-            if (reminderData[j].ID == reminderComponent.reminderDataId)
+            if (reminderData[j].ID == reminderComponent.reminderData.ID)
 
             {
-                AndroidNotificationManager.Instance.CancelNotification(reminderComponent.reminderDataId);//取消通知
+                AndroidNotificationManager.Instance.CancelNotification(reminderData[j].ID);//取消通知
                 reminderData.RemoveAt(j);
                 break;
             }
         }
-        i = reminderData.Count - 1; // 更新i索引
         SaveReminderData();
     }
     void NotificationReceived(AndroidNotificationIntentData data)
@@ -261,17 +193,87 @@ public class ReminderManager : MonoBehaviour
         for (int i = 0; i < reminderobject.Count; i++)//删除记事条
         {
             Reminder reminderComponent = reminderobject[i].GetComponent<Reminder>();//找到记事条的reminder数据
-            Reminder outreminderComponent = outreminderobject[i].GetComponent<Reminder>();
-            if (data.Id == reminderComponent.reminderDataId)//记事条reminder的id数据和要删的reminderdata数据一致
+            if (data.Id == reminderComponent.reminderData.ID)//记事条reminder的id数据和要删的reminderdata数据一致
             {
                 DestroyReminder(reminderobject[i], outreminderobject[i], reminderComponent);
-                SaveReminderData();//保存数据
             }
         }
     }
+    void CheckNotification()//检查通知是否发达
+    {
+        DateTime now = DateTime.Now;
+        for (int i = 0; i < reminderData.Count; i++)
+        {
+            if (reminderData[i].firetime <= now)//判断列表中的时间是否比现在的时间早
+            {
+                destroyindex.Add(i);//比现在早的通知添加进销毁列表
+                string state = AndroidNotificationManager.Instance.CheckNotificationStatus(reminderData[i].ID);
+                if (state == "Delivered")
+                {
+                    if (!AndroidNotificationManager.Instance.CheckPermissionStatustostring())
+                    {
+                        androidsettingtip.SetActive(true);
+                        Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+                        tiptext.text = reminderData[i].firetime.ToString("HH:mm") + "前多条通知未能在准确的时间送达,可能是禁止设备后台启动或者关闭了通知，请按设置获取权限";
+                    }
+
+                }
+                if (state == "Unknown")
+                {
+                    androidsettingtip.SetActive(true);
+                    Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+                    tiptext.text = reminderData[i].firetime.ToString("HH:mm") + "前多条通知未能在准确的时间送达,可能是禁止设备后台启动或者关闭了通知，请按设置获取权限"; ;
+                }
+                if (state == "Unavailable")
+                {
+                    androidsettingtip.SetActive(true);
+                    Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+                    tiptext.text = reminderData[i].firetime.ToString("HH:mm") + "前多条通知未能在准确的时间送达,可能是禁止设备后台启动或者关闭了通知，请按设置获取权限"; ;
+                }
+
+            }
+
+        }
+        for (int i = destroyindex.Count - 1; i > -1; i--)//执行销毁
+        {
+            int index = destroyindex[i];
+            Reminder reminderComponent = reminderobject[index].GetComponent<Reminder>();//找到记事条的reminder数据
+            DestroyReminder(reminderobject[index], outreminderobject[index], reminderComponent);
+        }
+    }
+
+
+    // 计算触发时间（处理跨天情况）
+    private DateTime CalculateTriggerTime(int hour, int minute)
+    {
+        DateTime now = DateTime.Now;
+        DateTime triggerTime = new DateTime(now.Year, now.Month, now.Day, hour, minute, 0);
+        // 如果时间已过，设置为明天
+        if (triggerTime <= now)
+        {
+            triggerTime = triggerTime.AddDays(1);
+        }
+
+        return triggerTime;
+    }
+    void ScrollToIndex(int index)
+    {
+
+        float p = Mathf.Max(0.001f, 1.0f - (float)index / reminderData.Count);
+        if (p > 0.9f)
+            p = 1f;
+        Debug.Log(p);
+        scrollRect.verticalNormalizedPosition = p;
+
+    }
+    void ReminderColor(int index)
+    {
+        Image reminderimage = reminderobject[index].GetComponentInChildren<Image>();
+        PanelDOTween.Instance.OnImageColor(reminderimage, Color.yellow, 0.5f);
+    }
 }
 
-[System.Serializable]
+[Serializable]
 public class ReminderDataList
 {
     public List<ReminderData> reminderData;

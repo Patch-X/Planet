@@ -4,26 +4,20 @@ using System;
 public class ReminderData
 {
     public string text;
-    public string Hour;
-    public string Minute;
+    public string firetimeString; // 用于序列化
     public int ID;
-    public int time;//时间总和，用于计算排序
-
-    public ReminderData(string text, string Hour, string Minute, int ID)
+    [NonSerialized]
+    public DateTime firetime; // 不参与序列化
+    public ReminderData(string text, DateTime firetime, int ID)
     {
         this.text = text;
-        this.Hour = Hour;
-        this.Minute = Minute;
+        this.firetime = firetime;
+        firetimeString = firetime.ToString("yyyy-MM-dd HH:mm:ss");
         this.ID = ID;
-        // ID = GetNextId();
-        time = int.Parse(Hour) * 60 + int.Parse(Minute);
-
-
     }
-    // private static int nextId = 1;
-    // private static int GetNextId()
-    // {
-    //     return nextId++;
-    // }
+    public void ParseFiretime()
+    {
+        firetime = DateTime.Parse(firetimeString);
+    }
 
 }

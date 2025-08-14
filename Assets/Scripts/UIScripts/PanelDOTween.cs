@@ -4,7 +4,24 @@ using UnityEngine.UI;
 
 public class PanelDOTween : MonoBehaviour
 {
+    public static PanelDOTween Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public float animationTime = 0f;// 动画时间
+    public void OnImageColor(Image image, Color endcolor, float t)
+    {
+        image.DOColor(endcolor, t).SetLoops(2, LoopType.Yoyo).SetEase(Ease.Linear);  // 设置缓动类型为线性
+    }
     public void OnStyleButtonClick(RectTransform Scrolls)
     {
 

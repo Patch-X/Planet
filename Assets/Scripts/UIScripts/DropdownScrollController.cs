@@ -19,7 +19,6 @@ public class DropdownScrollController : Dropdown
         if (scrollbar != null && options.Count > 1)
 
         {
-
             scrollbar.value = Mathf.Max(0.001f, 1.0f - (float)value / (options.Count - 1));
         }
 

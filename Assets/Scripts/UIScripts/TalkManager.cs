@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Android;
 public class TalkManager : MonoBehaviour
 {
     public InputField inputField; // 关联的InputField组件
@@ -12,12 +13,24 @@ public class TalkManager : MonoBehaviour
     public float maxWidth = 400f; // 最大宽度
     public float Padding = 20f;//image加上字符左右边距的大小
     public float Paddingedge = 30f;//image距离左右的距离
+    public float Paddingedger = 100f;//image距离左右的距离
     string respond = null;
     public ScrollRect wavescrollRect;
     public float scrollSpeed = 0.2f; // 每秒滚动速度
-                                     // public Material mat;
+    public GameObject OpenVoiceButton;
+    public GameObject CloseVoiceButton;
+    public GameObject tip;
+    public GameObject androidsettingtip;
+    private int androidversion;
     public Image Wave;
     float height = 20f;
+    void Awake()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        AndroidJavaClass buildVersionClass = new AndroidJavaClass("android.os.Build$VERSION");//判断安卓版本,Build 内部的 VERSION 类。
+        androidversion = buildVersionClass.GetStatic<int>("SDK_INT");//获取安卓版本SDK
+#endif
+    }
     IEnumerator Start()
     {
         // 等待直到 Manager 初始化完毕
@@ -36,6 +49,7 @@ public class TalkManager : MonoBehaviour
 
         if (height < 18f)
         {
+
 
             Material mat = Wave.material;
             height = Mathf.Lerp(20f, 1f, height);
@@ -69,7 +83,9 @@ public class TalkManager : MonoBehaviour
             RectTransform rt = rightImage.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
             VerticalLayoutGroup layout = newRightTalk.GetComponent<VerticalLayoutGroup>();
-            layout.padding.left = (int)(720f - width - Paddingedge);//右气泡往左移动距离
+            Debug.Log(Screen.width);
+            // layout.padding.left = (int)(1080 - width - Paddingedge);//右气泡往左移动距离
+            layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
             LayoutRebuilder.ForceRebuildLayoutImmediate(rt);//刷新刷新 ContentSizeFitter
             LayoutRebuilder.ForceRebuildLayoutImmediate(newRightTalk.GetComponent<RectTransform>());
             LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
@@ -101,7 +117,7 @@ public class TalkManager : MonoBehaviour
                 RectTransform rt = leftImage.GetComponent<RectTransform>();
                 rt.sizeDelta = new Vector2(width, rt.sizeDelta.y);
                 VerticalLayoutGroup layout = newLeftTalk.GetComponent<VerticalLayoutGroup>();
-                layout.padding.left = (int)Paddingedge;//左气泡往左移动距离
+                layout.padding.left = (int)Paddingedger;//左气泡往左移动距离
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
                 LayoutRebuilder.ForceRebuildLayoutImmediate(newLeftTalk.GetComponent<RectTransform>());
                 LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
@@ -118,11 +134,70 @@ public class TalkManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(content.GetComponent<RectTransform>());
         scrollRect.verticalNormalizedPosition = 0;
     }
+    private void PermissionCallbacks_PermissionDeniedAndDontAskAgain(string permissionName)//当用户选择“拒绝且不再询问”权限请求
+    {
+        androidsettingtip.SetActive(true);
+        Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+        tiptext.text = "录音权限被拒绝,如需要使用此功能请按设置->权限->麦克风->允许";
+    }
+    private void PermissionCallbacks_PermissionGranted(string permissionName)//当用户选择允许权限请求时触发。
+    {
+        LLMService.Instance.StartVoiceInput();//开启录音
+        // 已授权，隐藏Open，显示Close
+        OpenVoiceButton.SetActive(false);
+        CloseVoiceButton.SetActive(true);
+    }
+    private void PermissionCallbacks_PermissionDenied(string permissionName)//当用户选择拒绝权限请求时触发。
+    {
+        if (androidversion < 31)
+        {
+            tip.SetActive(true);
+            Text tiptext = tip.GetComponentInChildren<Text>();
+            tiptext.text = "录音权限被拒绝,如需要使用此功能请打开权限";
+        }
+        else
+        {
+            androidsettingtip.SetActive(true);
+            Text tiptext = androidsettingtip.GetComponentInChildren<Text>();
+            tiptext.text = "录音权限被拒绝,如需要使用此功能请按设置->权限->麦克风->允许";
+        }
 
+    }
+    public void OnOpenVoiceButton()
+    {
+        Debug.Log("androidversion:" + androidversion);
+        androidsettingtip.SetActive(false);
+        tip.SetActive(false);
+        //检查是否授权
+        if (Permission.HasUserAuthorizedPermission(Permission.Microphone))
+        {
+            LLMService.Instance.StartVoiceInput();//开启录音
+            // 已授权，隐藏Open，显示Close
+            OpenVoiceButton.SetActive(false);
+            CloseVoiceButton.SetActive(true);
+        }
+        else
+        {
+            var callbacks = new PermissionCallbacks();
+            callbacks.PermissionDenied += PermissionCallbacks_PermissionDenied;//当用户选择拒绝权限请求时触发。
+            callbacks.PermissionGranted += PermissionCallbacks_PermissionGranted;//当用户选择允许权限请求时触发。
+            if (androidversion < 31)//安卓12以下
+            {
+                callbacks.PermissionDeniedAndDontAskAgain += PermissionCallbacks_PermissionDeniedAndDontAskAgain;//当用户选择“拒绝且不再询问”权限请求
+            }
+            Permission.RequestUserPermission(Permission.Microphone, callbacks);//请求授权并且发送回调
+
+
+        }
+    }
     public void OnCloseVoiceButton()
     {
-        height = 0.0f;
+        LLMService.Instance.StopVoiceInput();//关闭录音
+        OpenVoiceButton.SetActive(true);
+        CloseVoiceButton.SetActive(false);
+        height = 20f;
     }
+
 
 }
 [Serializable]
