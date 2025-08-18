@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Gass01_MR2
+  m_Shader: {fileID: 4800000, guid: 589ea0397284e0e42b1985a0455d66b2, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 80d30bf20d868d542bd89ceb12b75ad7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FurMap:
+        m_Texture: {fileID: 2800000, guid: 14b13fa67fbc65e408a2f22367f469d1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 61bc63ff5e4e00649bab089b2627e736, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutout: 0.158
+    - _FurScale: 0.32
+    - _Metallic: 0
+    - _NormalScale: 1
+    - _Occlusion: 0.032
+    - _RimLightIntensity: 0.5
+    - _RimLightPower: 1.6
+    - _ShadowExtraBias: -1
+    - _ShellAmount: 14
+    - _ShellStep: 0.00122
+    - _Smoothness: 0.404
+    m_Colors:
+    - _AmbientColor: {r: 0.11023498, g: 0.18867922, b: 0.09344961, a: 1}
+    - _BaseColor: {r: 0.5352316, g: 1, b: 0.4575472, a: 1}
+    - _BaseMove: {r: 0, g: -0.3, b: 0, a: 3}
+    - _WindFreq: {r: 0.5, g: 0.7, b: 0.9, a: 1}
+    - _WindMove: {r: 0.5, g: 0.3, b: 0.2, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

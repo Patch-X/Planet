@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 0
+  EnableAddressable: 1
+  LocationToLower: 0
+  IncludeAssetGUID: 0
+  UniqueBundleName: 0
+  ShowEditorAlias: 0
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: 
+    Groups:
+    - GroupName: battle
+      GroupDesc: "\u6218\u6597"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Effect
+        CollectorGUID: 2c7b523f4f3f6754788230bddc2bc4c7
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/Entity
+        CollectorGUID: 4603c0b5a0cec054598163f2950e4a46
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/Audio
+        CollectorGUID: 0e55492426305b540b955844421d25a8
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: shader
+      GroupDesc: "\u7740\u8272\u5668"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/ShaderVariants
+        CollectorGUID: 5318a85c8485f164d88cae5ab1f18cf2
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackShaderVariants
+        FilterRuleName: CollectShaderVariants
+        AssetTags: 
+        UserData: 
+    - GroupName: scene
+      GroupDesc: "\u573A\u666F"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Scene
+        CollectorGUID: 112b6372a0ad12e4ea6aebf0a3196a34
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: ugui
+      GroupDesc: "\u9762\u677F"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/UIPanel
+        CollectorGUID: 571d8f137648b794f94f4f296d287c26
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/GameRes/UISprite
+        CollectorGUID: 7bc516bf57c9f1744afb68bf43d12a0c
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackSeparately
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: config
+      GroupDesc: "\u914D\u7F6E\u8868"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Config/Bytes
+        CollectorGUID: 00cd5e022d33ad048a7656d7aa9e95c4
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: dll
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameRes/Assembly
+        CollectorGUID: f132f3a7656da6549872edb9ddfe1201
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

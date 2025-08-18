@@ -1,0 +1,11 @@
+set WORKSPACE=..    			//..两个点表示上一级   .一个点是当前目录
+set LUBAN_DLL=%WORKSPACE%\Tools\Luban\Luban.dll
+set CONF_ROOT=.
+
+dotnet %LUBAN_DLL% ^    			//^表示换行，后边不要有空格
+    -t all ^
+    -d json ^
+    --conf %CONF_ROOT%\luban.conf ^
+    -x outputDataDir=output
+
+pause

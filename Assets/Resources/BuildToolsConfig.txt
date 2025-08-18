@@ -1,0 +1,5 @@
+
+{
+    "assembly_SourcePath" : "E:/Project/Test/my_framework/HybridCLRData/HotUpdateDlls/StandaloneWindows64",
+    "assembly_TargetPath" : "E:/Project/Test/my_framework/Assets/GameRes/Assembly"
+}

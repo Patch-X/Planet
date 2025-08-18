@@ -1,0 +1,337 @@
+{
+    "ShaderTotalCount": 14,
+    "VariantTotalCount": 31,
+    "ShaderVariantInfos": [
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/BlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Standard",
+            "ShaderVariantCount": 10,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN"
+                    ]
+                },
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN",
+                        "SHADOWS_SOFT",
+                        "SHADOWS_SPLIT_SPHERES",
+                        "UNITY_HDR_ON"
+                    ]
+                },
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN",
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN",
+                        "SHADOWS_SOFT",
+                        "SHADOWS_SPLIT_SPHERES",
+                        "UNITY_HDR_ON",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 4,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "DIRECTIONAL",
+                        "LIGHTPROBE_SH",
+                        "SHADOWS_SCREEN",
+                        "SHADOWS_SOFT",
+                        "SHADOWS_SPLIT_SPHERES",
+                        "UNITY_HDR_ON",
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "SHADOWS_DEPTH"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Skybox/Procedural",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "_SUNDISK_SIMPLE"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "UNITY_HDR_ON",
+                        "_SUNDISK_SIMPLE"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Legacy Shaders/Particles/Additive",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "UNITY_HDR_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureClip",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureClipText",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITexture",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUITextureBlit",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUIRoundedRect",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-UIRAtlasBlitCopy",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Hidden/Internal-GUIRoundedRectWithColorPerBorder",
+            "ShaderVariantCount": 1,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Resources/unity_builtin_extra",
+            "ShaderName": "Mobile/Particles/Additive",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS"
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "UNITY_HDR_ON"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/GameRes/Shader/StandardMobile.shader",
+            "ShaderName": "Mobile/Standard",
+            "ShaderVariantCount": 5,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 1,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 1,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "SHADOWS_SCREEN",
+                        "SHADOWS_SOFT",
+                        "SHADOWS_SPLIT_SPHERES",
+                        "UNITY_HDR_ON",
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "SHADOWS_DEPTH"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_EMISSION"
+                    ]
+                },
+                {
+                    "PassType": 8,
+                    "Keywords": [
+                        "_EMISSION",
+                        "_NORMALMAP"
+                    ]
+                }
+            ]
+        },
+        {
+            "AssetPath": "Assets/GameArt/Shader/MyUnlitShader.shader",
+            "ShaderName": "Unlit/MyUnlitShader",
+            "ShaderVariantCount": 2,
+            "ShaderVariantElements": [
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        ""
+                    ]
+                },
+                {
+                    "PassType": 0,
+                    "Keywords": [
+                        "BILLBOARD_FACE_CAMERA_POS",
+                        "SHADOWS_SCREEN",
+                        "SHADOWS_SOFT",
+                        "SHADOWS_SPLIT_SPHERES",
+                        "UNITY_HDR_ON"
+                    ]
+                }
+            ]
+        }
+    ]
+}
