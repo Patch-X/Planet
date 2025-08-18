@@ -46,6 +46,18 @@ public class PanelDOTween : MonoBehaviour
         Scrolls.DOLocalMoveX(Scrolls.rect.width / 2f, animationTime);
 
     }
+    public void OnImageButtonUp(RectTransform Scrolls)
+    {
+        Scrolls.gameObject.SetActive(true);  // 显示面板
+        Scrolls.DOLocalMoveY(0f, animationTime);
+
+    }
+    public void OnImageButtonUpBack(RectTransform Scrolls)
+    {
+
+        Scrolls.DOLocalMoveY(-200f, animationTime).OnComplete(() => Scrolls.gameObject.SetActive(false));//移动imagebutton一半的高度
+
+    }
     public void OnPanelDown(RectTransform panel)
     {
         panel.gameObject.SetActive(true);  // 显示面板
@@ -115,7 +127,11 @@ public class PanelDOTween : MonoBehaviour
     }
     public void OnPanelLeftBack(RectTransform panel)
     {
-        panel.DOLocalMoveX(Screen.height, animationTime).OnComplete(() => panel.gameObject.SetActive(false));
+        panel.DOLocalMoveX(Screen.width, animationTime).OnComplete(() => panel.gameObject.SetActive(false));
+    }
+    public void OnPanelRightBack(RectTransform panel)
+    {
+        panel.DOLocalMoveX(-Screen.width, animationTime).OnComplete(() => panel.gameObject.SetActive(false));
     }
 
     public void OnPanelFadeIn(RectTransform panel)

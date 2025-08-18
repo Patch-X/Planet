@@ -189,6 +189,7 @@ public class ReminderManager : MonoBehaviour
     }
     void NotificationReceived(AndroidNotificationIntentData data)
     {
+        CheckNotification();//检查通知是否发达
         for (int i = 0; i < reminderobject.Count; i++)//删除记事条
         {
             Reminder reminderComponent = reminderobject[i].GetComponent<Reminder>();//找到记事条的reminder数据
@@ -239,6 +240,7 @@ public class ReminderManager : MonoBehaviour
             Reminder reminderComponent = reminderobject[index].GetComponent<Reminder>();//找到记事条的reminder数据
             DestroyReminder(reminderobject[index], outreminderobject[index], reminderComponent);
         }
+        destroyindex.Clear();//清空列表
     }
 
 
